@@ -71,7 +71,7 @@ public class ConsoleCommands
 							builder.append(" ");
 						}
 						String out = "[" + channel + "] Turkey2349: " + builder.toString();
-						TurkeyBot.chatMessage(out);
+						ServerCore.output(Level.Info, "TurkeyBot", out);
 						TurkeyBot.bot.sendMessage(channel.toLowerCase(), builder.toString());
 					}
 				}

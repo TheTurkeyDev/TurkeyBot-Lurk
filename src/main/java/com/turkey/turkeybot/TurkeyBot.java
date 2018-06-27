@@ -1,6 +1,5 @@
 package com.turkey.turkeybot;
 
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,6 +15,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.theprogrammingturkey.ggserver.ServerCore;
 import com.theprogrammingturkey.ggserver.ServerCore.Level;
+import com.theprogrammingturkey.ggserver.news.INewsData;
+import com.theprogrammingturkey.ggserver.news.NewsDispatcher;
 import com.theprogrammingturkey.ggserver.services.IServiceCore;
 import com.theprogrammingturkey.ggserver.services.ServiceManager;
 import com.turkey.turkeybot.commands.ConsoleCommands;
@@ -30,7 +31,6 @@ public class TurkeyBot extends PircBot implements IServiceCore
 	private static List<String> chat = new ArrayList<String>();
 
 	private boolean connected = false;
-	private boolean muted = false;
 	private StreamCheckThread streamcheck;
 	private List<String> connectChannels = new ArrayList<String>();
 	private List<String> watchedChannels = new ArrayList<String>();
@@ -46,12 +46,10 @@ public class TurkeyBot extends PircBot implements IServiceCore
 			String keyword = arrayOfString[i];
 			if((message.toLowerCase().contains(keyword)) && (!sender.equalsIgnoreCase("turkey2349")))
 			{
-				if(!this.muted)
-				{
-					Toolkit.getDefaultToolkit().beep();
-				}
 				String out = "[" + channel + "] " + sender + ": " + message;
-				TurkeyBot.chatMessage(out);
+				chat.add(out);
+				ChatMessageData newsData = new ChatMessageData(channel, out);
+				NewsDispatcher.dispatch(newsData);
 				return;
 			}
 		}
@@ -221,29 +219,6 @@ public class TurkeyBot extends PircBot implements IServiceCore
 		return toReturn;
 	}
 
-	public void toggleMute()
-	{
-		this.muted = (!this.muted);
-	}
-
-	public static void chatMessage(String message)
-	{
-		chat.add(message);
-		ServerCore.output(Level.None, "TurkeyBot", "[Chat]" + message);
-
-		JsonObject dataToAdd = new JsonObject();
-		dataToAdd.addProperty("destination", "MobileApp");
-		dataToAdd.addProperty("purpose", "TurkeyBot");
-		JsonObject TBData = new JsonObject();
-		TBData.addProperty("action", "consoleMessage");
-		TBData.addProperty("message", message);
-		dataToAdd.add("data", TBData);
-		dataToAdd.addProperty("notification_title", "TurkeyBot");
-		dataToAdd.addProperty("notification_body", message);
-
-		// ServerCore.sendFCMMessage(dataToAdd.toString());
-	}
-
 	public static JsonArray getLastXMessages(int x)
 	{
 		if(x > chat.size())
@@ -326,5 +301,38 @@ public class TurkeyBot extends PircBot implements IServiceCore
 			}
 			this.connectChannels.clear();
 		}
+	}
+
+	private static class ChatMessageData implements INewsData
+	{
+		private String channel;
+		private String message;
+
+		public ChatMessageData(String channel, String message)
+		{
+			this.channel = channel;
+			this.message = message;
+		}
+
+		public String getData()
+		{
+			return message;
+		}
+
+		public String getDesc()
+		{
+			return channel;
+		}
+
+		public String getServiceID()
+		{
+			return "turkeyBot";
+		}
+
+		public String getTitle()
+		{
+			return "Chat Message Keyword";
+		}
+
 	}
 }

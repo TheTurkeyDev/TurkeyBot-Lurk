@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.turkey.turkeybot</groupId>
   <artifactId>TurkeyBotLurk</artifactId>
-  <version>1.9</version>
+  <version>1.10</version>
   <name>TurkeyBot - Lurk</name>
   <repositories>
 	<repository>
@@ -25,7 +25,7 @@
     <dependency>
 	  <groupId>com.theprogrammingturkey.ggserver</groupId>
 	  <artifactId>GGServer</artifactId>
-	  <version>0.3.0.13</version>
+	  <version>0.4.1.16</version>
     </dependency>
   </dependencies>
     
