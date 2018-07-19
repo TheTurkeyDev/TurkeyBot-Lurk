@@ -1,12 +1,8 @@
 package com.turkey.turkeybot.util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.theprogrammingturkey.volatiliaweb.WebRequestBuilder;
 import com.turkey.turkeybot.TurkeyBot;
 
 public class StreamCheckThread implements Runnable
@@ -62,17 +58,9 @@ public class StreamCheckThread implements Runnable
 			String result = "";
 			try
 			{
-				URL url = new URL("https://api.twitch.tv/kraken/streams/" + stream.substring(1));
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				connection.setRequestMethod("GET");
-				connection.addRequestProperty("Client-ID", "eetv1xsijh2ksbhb3l9kmmlcn6x4a7o");
-				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String line = "";
-				while((line = reader.readLine()) != null)
-				{
-					result = result + line;
-				}
-				reader.close();
+				WebRequestBuilder request = new WebRequestBuilder("https://api.twitch.tv/kraken/streams/" + stream.substring(1));
+				request.addHeaderProp("Client-ID", "eetv1xsijh2ksbhb3l9kmmlcn6x4a7o");
+				result = request.executeRequest();
 			} catch(Exception e)
 			{
 				System.out.println("Failed to get api info for stream: " + stream);

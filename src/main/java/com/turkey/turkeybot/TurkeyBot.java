@@ -25,7 +25,7 @@ import com.turkey.turkeybot.util.StreamCheckThread;
 
 public class TurkeyBot extends PircBot implements IServiceCore
 {
-	public static final String VERSION = "2.1";
+	public static final String VERSION = "1.11";
 	public static TurkeyBot bot;
 	public static JsonParser json;
 	private static List<String> chat = new ArrayList<String>();
@@ -39,12 +39,11 @@ public class TurkeyBot extends PircBot implements IServiceCore
 
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
-		String[] arrayOfString;
-		int j = (arrayOfString = this.keywords).length;
+		int j = this.keywords.length;
 		for(int i = 0; i < j; i++)
 		{
-			String keyword = arrayOfString[i];
-			if((message.toLowerCase().contains(keyword)) && (!sender.equalsIgnoreCase("turkey2349")))
+			String keyword = this.keywords[i];
+			if((message.toLowerCase().contains(keyword)) /*&& (!sender.equalsIgnoreCase("turkey2349"))*/)
 			{
 				String out = "[" + channel + "] " + sender + ": " + message;
 				chat.add(out);
@@ -240,7 +239,7 @@ public class TurkeyBot extends PircBot implements IServiceCore
 
 	public String getServiceName()
 	{
-		return "Turkey Bot - Lurk";
+		return "TurkeyBot - Lurk";
 	}
 
 	public void init()
@@ -332,6 +331,11 @@ public class TurkeyBot extends PircBot implements IServiceCore
 		public String getTitle()
 		{
 			return "Chat Message Keyword";
+		}
+
+		public boolean hasNotification()
+		{
+			return true;
 		}
 
 	}
