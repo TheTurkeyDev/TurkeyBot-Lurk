@@ -25,7 +25,7 @@ import com.turkey.turkeybot.util.StreamCheckThread;
 
 public class TurkeyBot extends PircBot implements IServiceCore
 {
-	public static final String VERSION = "1.11";
+	public static final String VERSION = "1.13";
 	public static TurkeyBot bot;
 	public static JsonParser json;
 	private static List<String> chat = new ArrayList<String>();
