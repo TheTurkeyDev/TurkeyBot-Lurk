@@ -1,4 +1,4 @@
-package com.turkey.turkeybot.util;
+package com.theprogrammingturkey.turkeybot.util;
 
 import java.util.Map;
 

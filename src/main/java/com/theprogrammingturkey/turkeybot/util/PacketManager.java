@@ -1,4 +1,4 @@
-package com.turkey.turkeybot.util;
+package com.theprogrammingturkey.turkeybot.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -1,10 +1,10 @@
-package com.turkey.turkeybot.commands;
+package com.theprogrammingturkey.turkeybot.commands;
 
 import com.theprogrammingturkey.ggserver.ServerCore;
 import com.theprogrammingturkey.ggserver.ServerCore.Level;
 import com.theprogrammingturkey.ggserver.commands.CommandManager;
 import com.theprogrammingturkey.ggserver.commands.SimpleCommand;
-import com.turkey.turkeybot.TurkeyBot;
+import com.theprogrammingturkey.turkeybot.TurkeyBot;
 
 public class ConsoleCommands
 {
@@ -20,7 +20,12 @@ public class ConsoleCommands
 				{
 					if(args.length > 1)
 					{
-						TurkeyBot.bot.connectToChannel(args[1].toLowerCase());
+						String channelName = args[1].toLowerCase();
+						Integer channelID = TurkeyBot.bot.getChannelID(channelName);
+						if(channelID != -1)
+							TurkeyBot.bot.connectToChannel(channelID);
+						else
+							ServerCore.output(Level.Error, "TurkeyBot", channelName + " is not a valid channel!");
 					}
 					else
 					{
@@ -31,15 +36,29 @@ public class ConsoleCommands
 				{
 					if(args.length > 1)
 					{
-						TurkeyBot.bot.disconnectFromChannel(args[1].toLowerCase());
+						String channelName = args[1].toLowerCase();
+						Integer channelID = TurkeyBot.bot.getChannelID(channelName);
+						if(channelID != -1)
+							TurkeyBot.bot.disconnectFromChannel(channelID);
+						else
+							ServerCore.output(Level.Error, "TurkeyBot", channelName + " is not a valid channel!");
 					}
 				}
 				else if(command.equalsIgnoreCase("add"))
 				{
 					if(args.length > 1)
 					{
-						TurkeyBot.bot.addWatchedChannel(args[1].toLowerCase(), true);
-						ServerCore.output(Level.Info, "TurkeyBot", "Added " + args[1].toLowerCase() + " to the watched channels");
+						String channelName = args[1].toLowerCase();
+						Integer channelID = TurkeyBot.bot.getChannelID(channelName);
+						if(channelID != -1)
+						{
+							TurkeyBot.bot.addWatchedChannel(channelID, true);
+							ServerCore.output(Level.Info, "TurkeyBot", "Added " + args[1].toLowerCase() + " to the watched channels");
+						}
+						else
+						{
+							ServerCore.output(Level.Error, "TurkeyBot", channelName + " is not a valid channel!");
+						}
 					}
 					else
 					{
@@ -50,8 +69,17 @@ public class ConsoleCommands
 				{
 					if(args.length > 1)
 					{
-						TurkeyBot.bot.removeWatchedChannel(args[1].toLowerCase(), true);
-						ServerCore.output(Level.Info, "TurkeyBot", "Removed " + args[1].toLowerCase() + " to the watched channels");
+						String channelName = args[1].toLowerCase();
+						Integer channelID = TurkeyBot.bot.getChannelID(channelName);
+						if(channelID != -1)
+						{
+							TurkeyBot.bot.removeWatchedChannel(channelID, true);
+							ServerCore.output(Level.Info, "TurkeyBot", "Removed " + args[1].toLowerCase() + " to the watched channels");
+						}
+						else
+						{
+							ServerCore.output(Level.Error, "TurkeyBot", channelName + " is not a valid channel!");
+						}
 					}
 				}
 				else if(command.equalsIgnoreCase("reconnect"))
@@ -63,7 +91,8 @@ public class ConsoleCommands
 					if(args.length > 2)
 					{
 						String channel = args[1].contains("#") ? args[1] : "#" + args[1];
-						TurkeyBot.bot.isConnectedToChannel(channel.toLowerCase());
+						Integer channelID = TurkeyBot.bot.getChannelID(channel.toLowerCase());
+						TurkeyBot.bot.isConnectedToChannel(channelID);
 						StringBuilder builder = new StringBuilder();
 						for(int i = 2; i < args.length; i++)
 						{
